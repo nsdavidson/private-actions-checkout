@@ -11722,6 +11722,7 @@ const run = async () => {
     const basePath = getInput('checkout_base_path')
     const appId = getInput('app_id')
     const privateKey = getInput('app_private_key')
+    const personalAccessToken = getInput('personal_access_token')
 
     let cloneStrategy
     let appToken
@@ -11735,12 +11736,17 @@ const run = async () => {
         setFailed('App > App token generation failed. Workflow can not continue')
         return
       }
+    } else if (hasValue(personalAccessToken)) {
+      info('PAT > Cloning with Personal Access Token')
+      appToken = personalAccessToken
+      cloneStrategy = CLONE_STRATEGY_APP
     } else if (hasValue(sshPrivateKey)) {
       cloneStrategy = CLONE_STRATEGY_SSH
       info('SSH > Cloning using SSH strategy')
       info('SSH > Setting up the SSH agent with the provided private key')
       sshSetup(sshPrivateKey)
     } else {
+      info(`PAT: ${personalAccessToken}`)
       cloneStrategy = CLONE_STRATEGY_SSH
       info('SSH > Cloning using SSH strategy')
       info('SSH > No private key provided. Assuming valid SSH credentials are available')
