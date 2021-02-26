@@ -44,7 +44,9 @@ const run = async () => {
         return
       }
     } else if (hasValue(personalAccessToken)) {
-      cloneStrategy = CLONE_STRATEGY_TOKEN
+      info('PAT > Cloning with Personal Access Token')
+      appToken = personalAccessToken
+      cloneStrategy = CLONE_STRATEGY_APP
     } else if (hasValue(sshPrivateKey)) {
       cloneStrategy = CLONE_STRATEGY_SSH
       info('SSH > Cloning using SSH strategy')
@@ -62,8 +64,6 @@ const run = async () => {
         cloneWithApp(basePath, action, appToken)
       } else if (cloneStrategy === CLONE_STRATEGY_SSH) {
         cloneWithSSH(basePath, action)
-      } else if (cloneStrategy === CLONE_STRATEGY_TOKEN) {
-        cloneWithApp(basePath, action, personalAccessToken)
       }
     })
 
