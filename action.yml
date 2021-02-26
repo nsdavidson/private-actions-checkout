@@ -17,6 +17,9 @@ inputs:
   app_private_key:
     description: The app private key to authenticate with a GitHub app
     required: false
+  personal_access_token:
+    description: The personal access token to use for checking out actions
+    required: false
 runs:
   using: "node12"
   main: "dist/index.js"

@@ -20,6 +20,7 @@ const hasValue = (input) => {
 
 const CLONE_STRATEGY_SSH = 'ssh'
 const CLONE_STRATEGY_APP = 'app'
+const CLONE_STRATEGY_TOKEN = 'token'
 
 const run = async () => {
   try {
@@ -28,6 +29,7 @@ const run = async () => {
     const basePath = getInput('checkout_base_path')
     const appId = getInput('app_id')
     const privateKey = getInput('app_private_key')
+    const personalAccessToken = getInput('personal_access_token')
 
     let cloneStrategy
     let appToken
@@ -41,6 +43,8 @@ const run = async () => {
         setFailed('App > App token generation failed. Workflow can not continue')
         return
       }
+    } else if (hasValue(personalAccessToken)) {
+      cloneStrategy = CLONE_STRATEGY_TOKEN
     } else if (hasValue(sshPrivateKey)) {
       cloneStrategy = CLONE_STRATEGY_SSH
       info('SSH > Cloning using SSH strategy')
@@ -58,6 +62,8 @@ const run = async () => {
         cloneWithApp(basePath, action, appToken)
       } else if (cloneStrategy === CLONE_STRATEGY_SSH) {
         cloneWithSSH(basePath, action)
+      } else if (cloneStrategy === CLONE_STRATEGY_TOKEN) {
+        cloneWithApp(basePath, action, personalAccessToken)
       }
     })
 
