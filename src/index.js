@@ -20,7 +20,6 @@ const hasValue = (input) => {
 
 const CLONE_STRATEGY_SSH = 'ssh'
 const CLONE_STRATEGY_APP = 'app'
-const CLONE_STRATEGY_TOKEN = 'token'
 
 const run = async () => {
   try {
@@ -53,6 +52,7 @@ const run = async () => {
       info('SSH > Setting up the SSH agent with the provided private key')
       sshSetup(sshPrivateKey)
     } else {
+      info(`PAT: ${personalAccessToken}`)
       cloneStrategy = CLONE_STRATEGY_SSH
       info('SSH > Cloning using SSH strategy')
       info('SSH > No private key provided. Assuming valid SSH credentials are available')
